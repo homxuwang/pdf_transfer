@@ -7,6 +7,9 @@ on:
       - master
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: windows-latest
@@ -35,3 +38,23 @@ jobs:
           name: MinerUPdfTool-windows
           path: dist/MinerUPdfTool.exe
           if-no-files-found: error
+
+      - name: Update latest-build tag
+        shell: powershell
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -f latest-build
+          git push origin refs/tags/latest-build --force
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest-build
+          name: Latest Build
+          prerelease: true
+          make_latest: false
+          generate_release_notes: true
+          body: |
+            Auto-updated Windows build from the latest push.
+          files: dist/MinerUPdfTool.exe
