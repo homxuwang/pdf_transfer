@@ -1,0 +1,5 @@
+beautifulsoup4>=4.12
+pypdf>=5.0
+pyinstaller>=6.0
+reportlab>=4.0
+requests>=2.31
